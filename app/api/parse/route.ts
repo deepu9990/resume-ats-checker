@@ -1,4 +1,6 @@
 import mammoth from "mammoth";
+// @ts-ignore - pdf-parse/lib/pdf-parse.js doesn't have type definitions
+import * as parser from "pdf-parse/lib/pdf-parse.js";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
@@ -22,8 +24,7 @@ export async function POST(request: Request) {
     let text = "";
 
     if (file.type === "application/pdf" || file.name.endsWith(".pdf")) {
-      const pdfParse = (await import("pdf-parse")).default;
-      const data = await pdfParse(buffer);
+      const data = await parser(buffer);
       text = data.text || "";
     } else if (
       file.type ===
